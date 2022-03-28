@@ -53,7 +53,7 @@ SELECT
          WHEN array_length(trace_address,1) = 3 then '{'||trace_address[1]||','||trace_address[2]||'}'
     END as trace_address,
     tx_hash,
-    value/10^18 AS fees,
+    value AS fees,
     traces."from",
     traces."to"
 FROM ethereum.traces
@@ -65,12 +65,11 @@ AND traces.block_time < end_ts
 SELECT 
     '{3}' as trace_address,
     evt_tx_hash as tx_hash,
-    value / 10^token.decimals AS fees,
+    value AS fees,
     "from",
     "to"
    FROM erc20."ERC20_evt_Transfer" erc
-   INNER JOIN erc20."tokens" token ON erc.contract_address = token.contract_address
-   AND "to" = '\x5b3256965e7c3cf26e11fcaf296dfc8807c01073'
+   WHERE "to" = '\x5b3256965e7c3cf26e11fcaf296dfc8807c01073'
    AND evt_block_time >= start_ts
    AND evt_block_time < start_ts
 ),
